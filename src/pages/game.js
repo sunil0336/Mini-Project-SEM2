@@ -107,7 +107,7 @@ const Game = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 to-black text-white font-sans">
+    <div className="flex flex-col items-center justify-center min-h-screen  pb-10">
      <Nav />
 
       <div className="mt-10 bg-gradient-to-br from-purple-800 to-indigo-900 p-6 rounded-xl shadow-xl text-center">
@@ -160,16 +160,6 @@ const Game = () => {
       >
         Restart
       </button>
-
-      <div id="about" className="mt-16 max-w-xl bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-xl shadow-lg text-gray-300">
-        <h2 className="text-3xl font-bold mb-4 text-white">About Min-Max</h2>
-        <p>
-          Min-Max is a recursive algorithm used in decision making and game theory.
-          It is used to find the optimal move for a player, assuming that the opponent
-          also plays optimally. It explores all possible moves and chooses the one that
-          maximizes the player's chances of winning while minimizing the opponent's.
-        </p>
-      </div>
     </div>
   );
 };
