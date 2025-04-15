@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Nav from "../components/Nav";
 
 const emptyBoard = Array(9).fill(null);
@@ -65,21 +65,49 @@ const minMax = (board, isMaximizing, level, depth = 0) => {
   return bestMove;
 };
 
-const Square = ({ value, onClick }) => (
-  <button
-    className="w-24 h-24 text-5xl font-extrabold flex items-center justify-center border border-purple-500 bg-gradient-to-br from-purple-900 to-indigo-900 shadow-inner text-cyan-300 hover:brightness-125 transition-all duration-200"
-    onClick={onClick}
-  >
-    {value}
-  </button>
-);
+const Square = ({ value, onClick }) => {
+  const getColor = () => {
+    if (value === "X") return "text-pink-400";
+    if (value === "O") return "text-blue-400";
+    return "text-white";
+  };
+
+  return (
+    <button
+      className={`w-24 h-24 text-5xl font-extrabold flex items-center justify-center border border-purple-500 bg-gradient-to-br from-purple-900 to-indigo-900 shadow-inner hover:brightness-125 transition-all duration-200 ${getColor()}`}
+      onClick={onClick}
+    >
+      {value}
+    </button>
+  );
+};
 
 const Game = () => {
   const [board, setBoard] = useState(emptyBoard);
   const [isXTurn, setIsXTurn] = useState(true);
   const [mode, setMode] = useState("AI");
   const [level, setLevel] = useState("hard");
+  const [xWins, setXWins] = useState(0);
+  const [oWins, setOWins] = useState(0);
+  const [lastWinner, setLastWinner] = useState(null);
+  const [history, setHistory] = useState([]); // Store the last few winners
+
   const winner = checkWinner(board);
+
+  useEffect(() => {
+    if (winner === "X") {
+      setXWins((prev) => prev + 1);
+      setLastWinner("X");
+      setHistory((prevHistory) => [winner, ...prevHistory].slice(0, 5)); // Keep the last 5 winners
+    } else if (winner === "O") {
+      setOWins((prev) => prev + 1);
+      setLastWinner("O");
+      setHistory((prevHistory) => [winner, ...prevHistory].slice(0, 5)); // Keep the last 5 winners
+    } else if (winner === "Draw") {
+      setLastWinner("Draw");
+      setHistory((prevHistory) => ["Draw", ...prevHistory].slice(0, 5)); // Keep the last 5 results
+    }
+  }, [winner]);
 
   const handleClick = (i) => {
     if (board[i] || winner) return;
@@ -104,11 +132,20 @@ const Game = () => {
   const resetGame = () => {
     setBoard(emptyBoard);
     setIsXTurn(true);
+    setXWins(0);
+    setOWins(0);
+    setLastWinner(null);
+    setHistory([]); // Reset the history
+  };
+
+  const newMatch = () => {
+    setBoard(emptyBoard);
+    setIsXTurn(true);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen  pb-10">
-     <Nav />
+    <div className="flex flex-col items-center justify-center min-h-screen pb-10">
+      <Nav />
 
       <div className="mt-10 bg-gradient-to-br from-purple-800 to-indigo-900 p-6 rounded-xl shadow-xl text-center">
         <h2 className="text-2xl font-bold text-white mb-4">Select Game Mode</h2>
@@ -125,41 +162,76 @@ const Game = () => {
           >
             Two Players
           </button>
+
+          {mode === "AI" && (
+            <>
+              <button
+                onClick={() => setLevel("easy")}
+                className={`px-6 py-2 rounded-full font-semibold transition ${level === "easy" ? "bg-purple-500 text-white" : "bg-gray-700 text-gray-300"}`}
+              >
+                Easy
+              </button>
+              <button
+                onClick={() => setLevel("hard")}
+                className={`px-6 py-2 rounded-full font-semibold transition ${level === "hard" ? "bg-purple-500 text-white" : "bg-gray-700 text-gray-300"}`}
+              >
+                Hard
+              </button>
+            </>
+          )}
         </div>
-        {mode === "AI" && (
-          <select
-            className="mt-4 bg-gray-800 border border-gray-600 text-white px-4 py-2 rounded-full"
-            onChange={(e) => setLevel(e.target.value)}
-            value={level}
-          >
-            <option value="easy">Easy</option>
-            <option value="hard">Hard</option>
-          </select>
-        )}
       </div>
 
-      <div className="mt-8 text-2xl font-bold">
-        {winner ? (
-          winner === "Draw" ? "It's a Draw" : `${winner} Wins!`
-        ) : (
-          <span>
-            Next player: {isXTurn ? <span className="text-cyan-400">X 🔵</span> : <span className="text-pink-400">O 🔴</span>}
-          </span>
-        )}
-      </div>
 
-      <div className="grid grid-cols-3 gap-3 mt-6">
-        {board.map((value, i) => (
-          <Square key={i} value={value} onClick={() => handleClick(i)} />
-        ))}
-      </div>
+      <div className="flex flex-col md:flex-row mt-8 gap-10 items-center justify-center">
+        <div>
+          <div className="text-2xl font-bold text-center mb-4">
+            {winner ? (
+              winner === "Draw" ? "It's a Draw" : `${winner} Wins!`
+            ) : (
+              <span>
+                Next player: {isXTurn ? <span className="text-cyan-400">X 🔵</span> : <span className="text-pink-400">O 🔴</span>}
+              </span>
+            )}
+          </div>
 
-      <button
-        className="mt-6 px-6 py-3 bg-gradient-to-r from-pink-500 to-red-600 hover:brightness-110 rounded-full font-semibold shadow-md"
-        onClick={resetGame}
-      >
-        Restart
-      </button>
+          <div className="grid grid-cols-3 gap-3">
+            {board.map((value, i) => (
+              <Square key={i} value={value} onClick={() => handleClick(i)} />
+            ))}
+          </div>
+
+          <div className="flex gap-4 mt-6 justify-center">
+            <button
+              className="px-6 py-3 bg-gradient-to-r from-pink-500 to-red-600 hover:brightness-110 rounded-full font-semibold shadow-md"
+              onClick={newMatch}
+            >
+              New Match
+            </button>
+            <button
+              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-700 hover:brightness-110 rounded-full font-semibold shadow-md"
+              onClick={resetGame}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-gray-900 p-6 rounded-xl shadow-lg text-white w-64">
+          <h3 className="text-xl font-semibold mb-4 text-center">Game Stats</h3>
+          <p className="text-lg mb-2">X Wins: <span className="text-pink-400 font-bold">{xWins}</span></p>
+          <p className="text-lg mb-2">O Wins: <span className="text-blue-400 font-bold">{oWins}</span></p>
+          <p className="text-lg mb-2">Last Winner: <span className="text-yellow-400 font-bold">{lastWinner}</span></p>
+          <div className="mt-4">
+            <h4 className="text-lg font-semibold">Recent Winners</h4>
+            <ul className="text-sm">
+              {history.map((item, index) => (
+                <li key={index} className="text-gray-300">{index + 1}. {item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

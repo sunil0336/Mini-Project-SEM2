@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 
 function Nav() {
   return (
-    <nav className="w-full bg-gradient-to-r from-purple-700 to-indigo-800 text-white py-4 px-8 flex justify-between items-center shadow-md">
-      <h1 className="text-3xl font-extrabold tracking-wide">Cosmic Tic Tac Toe</h1>
+    <nav className="absolute top-0 w-full bg-gradient-to-r from-purple-700 to-indigo-800 text-white py-4 px-8 flex justify-between items-center shadow-md">
+      <h1 className="text-3xl font-extrabold tracking-wide">Tic Tac Toe</h1>
       <div className="flex gap-4">
       <NavLink
           to="/"

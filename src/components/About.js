@@ -3,7 +3,7 @@ import Nav from "../components/Nav";
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white pb-4">
+    <div className="min-h-screen bg-gray-900 text-white pb-2 pt-20">
       <Nav />
       <div className="max-w-4xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg p-8 mt-2 ">
         <h1 className="text-3xl font-bold mb-4">About the Min-Max Algorithm</h1>
