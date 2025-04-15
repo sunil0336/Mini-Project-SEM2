@@ -2,7 +2,7 @@ import React from 'react';
 
 function Footer() {
   return (
-    <footer className="absolute w-full bg-gradient-to-r from-indigo-800 to-purple-700 text-white py-4  shadow-inner">
+    <footer className=" w-full bg-gradient-to-r from-indigo-800 to-purple-700 text-white py-4  shadow-inner">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
         <p className="text-sm text-center md:text-left">
           © {new Date().getFullYear()} Cosmic Tic Tac Toe. All rights reserved.

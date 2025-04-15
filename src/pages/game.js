@@ -144,7 +144,7 @@ const Game = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen pb-10">
+    <div className="flex flex-col items-center justify-center min-h-screen pb-2">
       <Nav />
 
       <div className="mt-10 bg-gradient-to-br from-purple-800 to-indigo-900 p-6 rounded-xl shadow-xl text-center">
