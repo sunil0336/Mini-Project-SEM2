@@ -34,6 +34,13 @@ const About = () => {
             </li>
             <li>The AI selects the move that leads to the highest value.</li>
           </ul>
+          <img
+            src="/gameimg.png"
+            alt="About Game"
+            className="w-full h-auto rounded-lg shadow-lg mt-6"
+          />
+
+
         </section>
 
         <section className="mb-6">

@@ -5,7 +5,7 @@ function Footer() {
     <footer className=" w-full bg-gradient-to-r from-indigo-800 to-purple-700 text-white py-4  shadow-inner">
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
         <p className="text-sm text-center md:text-left">
-          © {new Date().getFullYear()} Cosmic Tic Tac Toe. All rights reserved.
+          © 2025 Tic Tac Toe. All rights reserved.
         </p>
         <div className="flex gap-4 mt-2 md:mt-0">
           <a

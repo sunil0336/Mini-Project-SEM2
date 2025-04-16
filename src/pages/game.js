@@ -90,7 +90,7 @@ const Game = () => {
   const [xWins, setXWins] = useState(0);
   const [oWins, setOWins] = useState(0);
   const [lastWinner, setLastWinner] = useState(null);
-  const [history, setHistory] = useState([]); // Store the last few winners
+  const [history, setHistory] = useState([]);
 
   const winner = checkWinner(board);
 
@@ -98,14 +98,14 @@ const Game = () => {
     if (winner === "X") {
       setXWins((prev) => prev + 1);
       setLastWinner("X");
-      setHistory((prevHistory) => [winner, ...prevHistory].slice(0, 5)); // Keep the last 5 winners
+      setHistory((prev) => ["X", ...prev.slice(0, 4)]);
     } else if (winner === "O") {
       setOWins((prev) => prev + 1);
       setLastWinner("O");
-      setHistory((prevHistory) => [winner, ...prevHistory].slice(0, 5)); // Keep the last 5 winners
+      setHistory((prev) => ["O", ...prev.slice(0, 4)]);
     } else if (winner === "Draw") {
       setLastWinner("Draw");
-      setHistory((prevHistory) => ["Draw", ...prevHistory].slice(0, 5)); // Keep the last 5 results
+      setHistory((prev) => ["Draw", ...prev.slice(0, 4)]);
     }
   }, [winner]);
 
@@ -135,7 +135,7 @@ const Game = () => {
     setXWins(0);
     setOWins(0);
     setLastWinner(null);
-    setHistory([]); // Reset the history
+    setHistory([]);
   };
 
   const newMatch = () => {
@@ -144,35 +144,46 @@ const Game = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen pb-2">
+    <div className="flex flex-col items-center justify-center min-h-screen pb-10">
       <Nav />
 
       <div className="mt-10 bg-gradient-to-br from-purple-800 to-indigo-900 p-6 rounded-xl shadow-xl text-center">
         <h2 className="text-2xl font-bold text-white mb-4">Select Game Mode</h2>
-        <div className="flex gap-4 justify-center">
+        <div className="flex gap-4 justify-center flex-wrap">
           <button
-            onClick={() => setMode("AI")}
+            onClick={() => {
+              setMode("AI");
+              newMatch();
+            }}
             className={`px-6 py-2 rounded-full font-semibold transition ${mode === "AI" ? "bg-purple-500 text-white" : "bg-gray-700 text-gray-300"}`}
           >
             Play vs AI
           </button>
           <button
-            onClick={() => setMode("2P")}
+            onClick={() => {
+              setMode("2P");
+              newMatch();
+            }}
             className={`px-6 py-2 rounded-full font-semibold transition ${mode === "2P" ? "bg-purple-500 text-white" : "bg-gray-700 text-gray-300"}`}
           >
             Two Players
           </button>
-
           {mode === "AI" && (
             <>
               <button
-                onClick={() => setLevel("easy")}
+                onClick={() => {
+                  setLevel("easy");
+                  newMatch();
+                }}
                 className={`px-6 py-2 rounded-full font-semibold transition ${level === "easy" ? "bg-purple-500 text-white" : "bg-gray-700 text-gray-300"}`}
               >
                 Easy
               </button>
               <button
-                onClick={() => setLevel("hard")}
+                onClick={() => {
+                  setLevel("hard");
+                  newMatch();
+                }}
                 className={`px-6 py-2 rounded-full font-semibold transition ${level === "hard" ? "bg-purple-500 text-white" : "bg-gray-700 text-gray-300"}`}
               >
                 Hard
@@ -181,7 +192,6 @@ const Game = () => {
           )}
         </div>
       </div>
-
 
       <div className="flex flex-col md:flex-row mt-8 gap-10 items-center justify-center">
         <div>
@@ -221,11 +231,11 @@ const Game = () => {
           <h3 className="text-xl font-semibold mb-4 text-center">Game Stats</h3>
           <p className="text-lg mb-2">X Wins: <span className="text-pink-400 font-bold">{xWins}</span></p>
           <p className="text-lg mb-2">O Wins: <span className="text-blue-400 font-bold">{oWins}</span></p>
-          <p className="text-lg mb-2">Last Winner: <span className="text-yellow-400 font-bold">{lastWinner}</span></p>
+          <p className="text-lg">Last Winner: <span className="text-yellow-400 font-bold">{lastWinner || "-"}</span></p>
           <div className="mt-4">
             <h4 className="text-lg font-semibold">Recent Winners</h4>
             <ul className="text-sm">
-              {history.map((item, index) => (
+            {history.map((item, index) => (
                 <li key={index} className="text-gray-300">{index + 1}. {item}</li>
               ))}
             </ul>
