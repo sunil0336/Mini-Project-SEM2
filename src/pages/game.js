@@ -99,11 +99,13 @@ const Game = () => {
       setXWins((prev) => prev + 1);
       setLastWinner("X");
       setHistory((prev) => ["X", ...prev.slice(0, 4)]);
-    } else if (winner === "O") {
+    } else if 
+    (winner === "O") {
       setOWins((prev) => prev + 1);
       setLastWinner("O");
       setHistory((prev) => ["O", ...prev.slice(0, 4)]);
-    } else if (winner === "Draw") {
+    } else if 
+    (winner === "Draw") {
       setLastWinner("Draw");
       setHistory((prev) => ["Draw", ...prev.slice(0, 4)]);
     }
